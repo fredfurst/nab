@@ -1,0 +1,5 @@
+lxml
+pyfiglet
+requests
+bs4
+ipython
