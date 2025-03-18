@@ -1,5 +1,6 @@
 import bs4
 import torch
+import pickle
 import ollama
 import requests
 from IPython import embed
@@ -13,7 +14,7 @@ print(f.renderText('Natural Antibody'))
 print('v. 0.0.1')
 
 print()
-print('This little guy pulls the thingies on each paper.')
+print('This little guy pulls the thingies on each paper and saves it to a pickle file.')
 print()
 
 textos = []
@@ -55,29 +56,10 @@ for i in range(1,11):
         embos.append(a)
     assert len(textos)==len(embos)
 
-promptacao = input("Dê-me seu prompt:")
-
-# model = SentenceTransformer("all-MiniLM-L6-v2")
-
-# Encode the user input
-# input_embedding = model.encode([promptacao])
-input_embedding = ollama.embed(
-    model='mxbai-embed-large',
-    input=promptacao,
-)
-
-# embed()
-cos_scores = []
-for e in embos:
-# Compute cosine similarity between the input and vault embeddings
-    # cos_scores = util.cos_sim(input_embedding["embeddings"], e["embeddings"])[0]
-    cos_scores.append(util.cos_sim(input_embedding["embeddings"], e["embeddings"])[0])
-# Adjust top_k if it's greater than the number of available scores
-top_k = min(3, len(cos_scores))
-# Sort the scores and get the top-k indices
-top_indices = torch.topk(torch.Tensor(cos_scores), k=top_k)[1].tolist()
-# Get the corresponding context from the vault
-relevant_context = [textos[idx].strip() for idx in top_indices]
-print(relevant_context)
-
-print()
+dados_pra_salvar = {
+    'textos': textos,
+    'embos': embos,
+}
+with open("stubs.pkl", "wb") as handle:
+    pickle.dump(dados_pra_salvar, handle)
+print("hoje nao tem promptacao")

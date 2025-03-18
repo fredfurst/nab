@@ -1,5 +1,8 @@
+bs4
+torch
+ollama
+requests
+ipython
 lxml
 pyfiglet
-requests
-bs4
-ipython
+sentence_transformers
